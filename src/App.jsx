@@ -1,18 +1,24 @@
 import { useState } from 'react'
 
-// Custom component
+// custom components
 import CustomForm from './components/CustomForm'
-
+import TaskList from './components/TaskList'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState([]);
+
+  const addTask = (task) => {
+    setTasks(prevState => [ ... prevState, task])
+  }
 
   return (
-    
-     <div className="App">
-      <CustomForm />
-     </div>
-    
+    <div className="container">
+      <header>
+        <h1>My Task List</h1>
+      </header>
+      <CustomForm addTask={addTask}/>
+      {tasks && <TaskList tasks={task} />}
+    </div>
   )
 }
 
