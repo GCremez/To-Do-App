@@ -7,7 +7,9 @@ import TaskList from './components/TaskList'
 
 function App() {
   const [tasks, setTasks] = useState([]);
-  const [editedTask, setEditedTask] = useState([null]);
+  const [setPreviousFocusEl, setSetPreviousFocusEl] = useState(null);
+  const [editedTask, setEditedTask] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const addTask = (task) => {
     setTasks(prevState => [ ... prevState, task])
@@ -31,7 +33,18 @@ function App() {
         ? { ...t, name: task.name }
         : t
       )))
-      // close the edit mode
+      closeEditMode();
+  }
+
+  const closeEditMode = () => {
+    setIsEditing(false)
+    setPreviousFocusEl.focus();
+  }
+
+  const enterEditMode = (task) => {
+    setEditedTask(task);
+    setIsEditing(true)
+    setPreviousFocusEl(document.activeElement);
   }
 
   return (
@@ -39,10 +52,15 @@ function App() {
       <header>
         <h1>My Task List</h1>
       </header>
-      <EditForm 
-        editedTask={editedTask}
-        updateTask={updateTask}
-      />
+      {
+        isEditing && (
+          <EditForm 
+            editedTask={editedTask}
+            updateTask={updateTask}
+            closeEditMode={closeEditMode}
+          />
+        )
+      }
       <CustomForm addTask={addTask}/>
       {tasks && (
       <TaskList 
